@@ -15,14 +15,16 @@ def download():
     if not url:
         return 'No URL provided', 400
 
-    # Generate unique filename
     filename = f"{uuid.uuid4()}.mp4"
     output_path = os.path.join("/tmp", filename)
+
+    cookies_path = os.path.join(os.path.dirname(__file__), "cookies.txt")
 
     ydl_opts = {
         'outtmpl': output_path,
         'format': 'best',
-        'cookies': 'cookies.txt',
+        'cookies': cookies_path,
+        'noplaylist': True
     }
 
     try:
