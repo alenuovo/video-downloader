@@ -11,15 +11,15 @@ def index():
 @app.route('/download', methods=['POST'])
 def download():
     url = request.form['url']
-    result = subprocess.run(
-        ['yt-dlp', '--cookies', 'www.youtube.com_cookies.txt', '-o', 'downloads/%(title)s.%(ext)s', url],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        text=True
-    )
-    return f"<pre>{result.stdout}</pre>"
+    
+    # Absolute path to cookies file (adjust if needed)
+    cookies_path = os.path.join(os.path.dirname(__file__), 'youtube_cookies.txt')
+    
+    try:
+        subprocess.run(['yt-dlp', '--cookies', cookies_path, url], check=True)
+        return 'Download started.'
+    except subprocess.CalledProcessError as e:
+        return f'Error downloading: {e}'
 
 if __name__ == '__main__':
-    if not os.path.exists('downloads'):
-        os.makedirs('downloads')
     app.run(host='0.0.0.0', port=5000)
