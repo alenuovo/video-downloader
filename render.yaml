@@ -3,4 +3,4 @@ services:
     name: video-downloader
     env: python
     buildCommand: ""
-    startCommand: gunicorn asaw:app
+    startCommand: gunicorn app:app
