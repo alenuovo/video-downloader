@@ -9,9 +9,14 @@ def index():
 
 @app.route('/download', methods=['POST'])
 def download():
-    url = request.form['url']
-    subprocess.run(['yt-dlp', url])
-    return 'Download started.'
+    url = request.form.get('url')
+    if not url:
+        return 'No URL provided.', 400
+    try:
+        subprocess.run(['yt-dlp', url], check=True)
+        return 'Download started.'
+    except subprocess.CalledProcessError as e:
+        return f'Error: {e}', 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000)so this was the saw py  s
